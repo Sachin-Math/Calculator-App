@@ -2,7 +2,6 @@ import { useState } from "react";
 
 function App() {
   const [calc, setCalc] = useState("");
-  const [result, setResult] = useState("");
 
   const ops = ["/", "*", "-", "+"];
 
@@ -13,15 +12,12 @@ function App() {
     ) {
       return;
     }
+
     setCalc(calc + value);
-    if (!ops.includes(value)) {
-      setResult(eval(calc + value).toString());
-    }
   };
 
   const createDigits = () => {
     const digits = [];
-
     for (let i = 1; i < 10; i++) {
       digits.push(
         <button onClick={() => updateCalc(i.toString())} key={i}>
@@ -33,15 +29,18 @@ function App() {
   };
 
   const calculate = () => {
-    setCalc(eval(calc).toString());
+    try {
+      setCalc(eval(calc).toString()); // Replace this part if you want to avoid eval completely.
+    } catch (e) {
+      setCalc("Error");
+    }
   };
 
   const deleteLast = () => {
-    if (calc == "") {
+    if (calc === "") {
       return;
     }
-    const value = calc.slice(0, -1);
-    setCalc(value);
+    setCalc(calc.slice(0, -1));
   };
 
   return (
